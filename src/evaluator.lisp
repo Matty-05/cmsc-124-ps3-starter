@@ -26,8 +26,10 @@
 
 The first match wins, so an inner binding shadows an outer one that shares its
 name. Signal an error when NAME is not bound at all."
-  (declare (ignore name env))
-  (error "lookup is not implemented"))
+  (let ((pair (assoc name env)))
+    (if pair
+        (cdr pair)
+        (error "Unbound symbol: ~S" name))))
 
 ;;; E2 -- prefix arithmetic.
 
@@ -91,5 +93,7 @@ CLOSURE is not a closure, and when the argument count does not match."
 
 Order the branches with care. NIL is a symbol as well as the empty list, and a
 number is not a cons, so the atom tests come before the list tests."
-  (declare (ignore expr env))
-  (error "eval-expr is not implemented"))
+  (cond
+    ((numberp expr) expr)
+    ((symbolp expr) (lookup expr env))
+    (t (error "Invalid expression: ~S" expr))))
