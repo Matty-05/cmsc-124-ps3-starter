@@ -38,15 +38,15 @@ name. Signal an error when NAME is not bound at all."
 
 MAPCAR and a LAMBDA do this in one line. Watch the arity: EVAL-EXPR takes two
 arguments and MAPCAR hands its function one."
-  (declare (ignore exprs env))
-  (error "eval-operands is not implemented"))
+  (mapcar (lambda (expr) (eval-expr expr env)) exprs))
 
 (defun apply-op (op values)
   "Apply the arithmetic operator OP to the two numbers in VALUES.
 
 OP is the symbol +, -, or *. Signal an error for anything else."
-  (declare (ignore op values))
-  (error "apply-op is not implemented"))
+  (if (member op '(+ - *))
+      (funcall op (first values) (second values))
+      (error "Unknown arithmetic operator: ~S" op)))
 
 ;;; E3 -- let.
 
@@ -96,4 +96,6 @@ number is not a cons, so the atom tests come before the list tests."
   (cond
     ((numberp expr) expr)
     ((symbolp expr) (lookup expr env))
+    ((and (consp expr) (member (first expr) '(+ - *)))
+     (apply-op (first expr) (eval-operands (rest expr) env)))
     (t (error "Invalid expression: ~S" expr))))
