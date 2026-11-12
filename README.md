@@ -7,7 +7,7 @@ Problem Set 3. The assignment manual defines the work and the submission rules.
 ## Pair
 
 - John Matthew Fallarme (`@Matty-05`)
-- 
+- Jemarco Briz (`@Jmbriz123`)
 
 ## Layout
 
